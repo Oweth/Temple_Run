@@ -1,0 +1,271 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body, html {
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+
+#container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#title h1 {
+    color: #fff;
+    font-size: 5rem;
+    text-shadow: 0 0 15px #ff0040;
+    animation: glow 2s infinite alternate;
+}
+
+#title h3 {
+    color: #fff;
+    font-size: 2rem;
+    margin-top: 10px;
+    text-shadow: 0 0 10px #00ff80;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 20px #fff, 0 0 30px #f0f, 0 0 40px #f0f;
+    }
+    to {
+        text-shadow: 0 0 25px #fff, 0 0 35px #f0f, 0 0 50px #f0f;
+    }
+}
+
+.menu-btn {
+    background-color: #ff0040;
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    margin: 20px;
+    pointer-events: all;
+    border-radius: 50px;
+    box-shadow: 0px 10px 20px rgba(255, 0, 64, 0.7);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.menu-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 15px 30px rgba(255, 0, 64, 1);
+}
+
+.menu-btn:active {
+    transform: scale(1.05);
+}
+
+#level-selection h2 {
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 40px;
+    text-shadow: 0 0 15px #00ff80;
+}
+
+.level-grid {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+
+.level {
+    cursor: pointer;
+    text-align: center;
+    pointer-events: all;
+}
+
+.level span {
+    color: white;
+    margin-top: 10px;
+    display: block;
+    font-size: 1.5rem;
+}
+
+.level-thumbnail {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, #3b3b3b, #000);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.level:hover .level-thumbnail {
+    transform: scale(1.2);
+    box-shadow: 0 0 25px rgba(0, 255, 128, 0.9);
+}
+
+/*
+    Styling for in Game
+*/
+
+/* Basic styles for the game container */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    background-color: #000;
+}
+
+#GameContainer {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Health Bar */
+#health-bar-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 200px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    border: 2px solid #00ff80;
+    pointer-events: none;
+}
+
+#health-bar {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #00ff80 0%, #ff0040 100%);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+/* Score Display */
+#score-display {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #fff;
+    font-size: 2rem;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#coin-display {
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    color: #fff;
+    font-size: 2rem;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+/* Pause Button */
+#pause-btn {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #ff0040;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0px 10px 20px rgba(255, 0, 64, 0.7);
+    pointer-events: all;
+}
+
+#pause-btn:hover {
+    box-shadow: 0px 15px 30px rgba(255, 0, 64, 1);
+}
+
+/* Game Over Screen */
+#game-over-message {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    pointer-events: all;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#game-over-message h1 {
+    color: #ff0040;
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.menu-btn {
+    background-color: #ff0040;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin: 20px;
+    border-radius: 50px;
+    box-shadow: 0px 10px 20px rgba(255, 0, 64, 0.7);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.menu-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 15px 30px rgba(255, 0, 64, 1);
+}
+
+.menu-btn:active {
+    transform: scale(1.05);
+}
+
+#finishLineMessage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: rgba(0, 255, 0, 0.8);
+    color: #fff;
+    font-size: 24px;
+    display: none; /* Initially hidden */
+    z-index: 10; /* Ensures it appears above other elements */
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Game Homepage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container"></div>
+
+    <div id="ui-overlay">
+        <!-- Game Title -->
+        <div id="title">
+            <h1>Temple Runner 3D</h1>
+            <h3>Adventure Awaits!</h3>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="main-menu">
+            <button class="menu-btn" id="play-btn">Play Game</button>
+            <button class="menu-btn">Options</button>
+            <button class="menu-btn">Credits</button>
+        </div>
+
+        <!-- Level Selection (Hidden by default) -->
+        <div id="level-selection" style="display: none;">
+            <h2>Select Your Level</h2>
+            <div class="level-grid">
+                <div class="level" id="level1">
+                    <div class="level-thumbnail"></div>
+                    <span><a href="game.html?level=1">Forest Run</a></span> <!-- Link to the game -->
+                </div>
+                <div class="level" id="level2">
+                    <div class="level-thumbnail"></div>
+                    <span><a href="game.html?level=2">Cave Escape</a></span> <!-- Link to the game -->
+                </div>
+                <div class="level" id="level3">
+                    <div class="level-thumbnail"></div>
+                    <span><a href="game.html?level=3">Temple Challenge</a></span> <!-- Link to the game -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
