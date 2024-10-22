@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Themed 3D Runner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="GameContainer"></div>
+
+    <div id="ui-overlay">
+        <!-- Health Bar -->
+        <div id="health-bar-container">
+            <div id="health-bar"></div>
+        </div>
+
+        <!-- Score Display -->
+        <div id="score-display">Score: 0</div>
+        <div id="coin-display">Coins: 0</div>
+
+        <!-- Pause Button -->
+        <button id="pause-btn" onclick="pauseGame()">Pause</button>
+
+        <!-- Game Over Message (Hidden by default) -->
+        <div id="game-over-message" style="display: none;">
+            <h1>Game Over</h1>
+            <button class="menu-btn" onclick="restartGame()">Restart</button>
+            <button class="menu-btn" onclick="goToMainMenu()">Main Menu</button>
+        </div>
+    </div>
+
+    <!-- Include Three.js from a CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <!-- Game logic -->
+    <script src="caveescape.js"></script>
+</body>
+</html>

@@ -15,12 +15,40 @@ let coinText = document.getElementById('coin-display'); // Element to display co
 
 //let loader = new THREE.GLTFLoader();
 
+let stars = []; // Array to store stars
+
+// Function to create and position stars
+function spawnStars() {
+    const starGeometry = new THREE.SphereGeometry(0.05, 16, 16); // Small spheres as stars
+    const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+    for (let i = 0; i < 1000; i++) { // Create multiple stars
+        const star = new THREE.Mesh(starGeometry, starMaterial);
+
+        // Randomly position stars on the left and right sides of the path
+        star.position.x = Math.random() > 0.5 ? -5 : 5; // Left or right side
+        star.position.y = Math.random() * 2 + 1; // Random height above the ground
+        star.position.z = -Math.random() * 100; // Spread stars along the path
+
+        scene.add(star); // Add star to the scene
+        stars.push(star); // Store in array for future use
+    }
+}
+
 // Initialize the scene, camera, and renderer
 function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
     camera.position.y = 2;
+
+    //add light
+    const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // White light
+    directionalLight.position.set(5, 10, 5); // Position the light
+    directionalLight.castShadow = true; // Enable shadows
+    scene.add(directionalLight);
 
     const finishLineMessage = document.createElement('div');
     finishLineMessage.id = 'finishLineMessage';
@@ -31,18 +59,33 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('GameContainer').appendChild(renderer.domElement);
 
-    // Create the player (sphere)
+    /*/ Create the player (sphere)
     const playerGeometry = new THREE.SphereGeometry(0.5, 32, 32);
     const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xff0040 });
     player = new THREE.Mesh(playerGeometry, playerMaterial);
     player.position.y = 0.5; // Start above the ground
+    scene.add(player);*/
+
+    player = createCarModel();
+    player.scale.set(0.25,0.25,0.25);
+    player.rotation.y = Math.PI / 2;
+    player.position.y = 0.5;
+    //player.position.set(0, 0.5, 0);
     scene.add(player);
 
-    // Create the ground
+    /*/ Create the ground
     const groundGeometry = new THREE.PlaneGeometry(10, 1000);
     const groundMaterial = new THREE.MeshBasicMaterial({ color: 0x555555, side: THREE.DoubleSide });
     ground = new THREE.Mesh(groundGeometry, groundMaterial);
     ground.rotation.x = -Math.PI / 2;
+    //ground.scale.x = 0.25;
+    ground.scale.y = 10;
+    scene.add(ground);*/
+    const groundGeometry = new THREE.PlaneGeometry(10,100);
+    const material2 = new THREE.MeshPhongMaterial({color: 0x8B4513, shininess: 3});
+    ground = new THREE.Mesh(groundGeometry, material2);
+    ground.rotation.x = -Math.PI / 2;
+    ground.scale.y = 10000;
     scene.add(ground);
 
     // Listen for keypress to control player
@@ -50,6 +93,8 @@ function init() {
 
     // Start obstacle spawning
     setInterval(spawnObstacle, obstacleInterval);
+
+    spawnStars();
 
     animate();
 }
@@ -88,6 +133,7 @@ document.addEventListener('keyup', (event) => {
 });
 
 
+
 // Animate the game (game loop)
 function animate() {
     if (!isGameOver) {
@@ -95,6 +141,13 @@ function animate() {
 
         // Move the player forward
         ground.position.z += playerSpeed;
+
+        stars.forEach(star => {
+            star.position.z += playerSpeed; // Move stars forward
+            if (star.position.z > 5) {
+                star.position.z = -100; // Reset stars to start behind the player
+            }
+        });
 
         // Move obstacles and check for collisions
         obstacles.forEach((obstacle, index) => {
@@ -146,7 +199,7 @@ function animate() {
     }
 }
 
-// Spawn obstacles (simple cubes)
+/*/ Spawn obstacles (simple cubes)
 function spawnObstacle() {
     const obstacleGeometry = new THREE.BoxGeometry(1, 1, 1);
     const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -156,6 +209,144 @@ function spawnObstacle() {
     obstacle.position.x = Math.random() > 0.5 ? 1.5 : -1.5; // Randomly place on left or right
     scene.add(obstacle);
     obstacles.push(obstacle);
+}*/
+
+function createCarModel() {
+    // Create a wheel (tire + spokes)
+    function createWheel() {
+        let wheel = new THREE.Mesh(
+            new THREE.TorusGeometry(0.75, 0.25, 16, 32),
+            new THREE.MeshLambertMaterial({ color: 0x0000A0 })
+        );
+        
+        let yellow = new THREE.MeshPhongMaterial({
+            color: 0xffff00,
+            specular: 0x303030,
+            shininess: 16
+        });
+        
+        let cylinder = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.5, 0.5, 1, 32, 1),
+            yellow
+        );
+        cylinder.scale.set(0.15, 1.2, 0.15); // Thin long cylinder (spoke)
+        
+        // Add spokes to the wheel
+        wheel.add(cylinder.clone());
+        cylinder.rotation.z = Math.PI / 3;
+        wheel.add(cylinder.clone());
+        cylinder.rotation.z = -Math.PI / 3;
+        wheel.add(cylinder.clone());
+        
+        return wheel;
+    }
+
+    // Create an axle with two wheels
+    function createAxle() {
+        let wheel = createWheel();
+        let axleModel = new THREE.Object3D();
+        
+        // Create a yellow cylinder for the axle
+        let yellow = new THREE.MeshPhongMaterial({
+            color: 0xffff00,
+            specular: 0x303030,
+            shininess: 16
+        });
+        let cylinder = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.5, 0.5, 1, 32, 1),
+            yellow
+        );
+        cylinder.scale.set(0.2, 4.3, 0.2);  // Long and thin for axle
+        cylinder.rotation.set(Math.PI / 2, 0, 0); // Rotate to align with z-axis
+        
+        axleModel.add(cylinder);
+        
+        // Add wheels to the axle
+        wheel.position.z = 2;
+        axleModel.add(wheel.clone());
+        wheel.position.z = -2;
+        axleModel.add(wheel);
+        
+        return axleModel;
+    }
+
+    // Create the car model
+    let carModel = new THREE.Object3D();
+    let red = new THREE.MeshPhongMaterial({
+        color: "red",
+        specular: 0x404040,
+        shininess: 8,
+        flatShading: true
+    });
+
+    // Body of the car
+    let body = new THREE.Mesh(new THREE.BoxGeometry(6, 1.2, 3), red);
+    body.position.y = 0.6;
+    
+    // Hood of the car
+    let hood = new THREE.Mesh(new THREE.BoxGeometry(3, 1, 2.8), red);
+    hood.position.set(0.5, 1.4, 0);
+    
+    // Headlights
+    let yellow = new THREE.MeshPhongMaterial({
+        color: 0xffff00,
+        specular: 0x303030,
+        shininess: 16
+    });
+    let headlight1 = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 8), yellow);
+    headlight1.scale.set(0.1, 0.25, 0.25);
+    headlight1.position.set(-3, 0.6, -1);
+
+    let headlight2 = headlight1.clone();
+    headlight2.position.set(-3, 0.6, 1);
+
+    // Axles
+    let carAxle1 = createAxle();
+    carAxle1.position.x = -2.5;
+    
+    let carAxle2 = createAxle();
+    carAxle2.position.x = 2.5;
+
+    // Add all parts to the car model
+    carModel.add(carAxle1);
+    carModel.add(carAxle2);
+    carModel.add(body);
+    carModel.add(hood);
+    carModel.add(headlight1);
+    carModel.add(headlight2);
+
+    return carModel;
+}
+
+function spawnObstacle() {
+    let tree = new THREE.Object3D();
+
+    // Create the trunk
+    let trunkMaterial = new THREE.MeshPhongMaterial({
+        color: 0x8B4513,
+        shininess: 10
+    });
+    let trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 1), trunkMaterial);
+    trunk.position.y = 0.5; // Move trunk to origin
+    
+    // Create the leaves
+    let leavesMaterial = new THREE.MeshPhongMaterial({
+        color: 0x00DD00,
+        specular: 0x006000,
+        shininess: 5
+    });
+    let leaves = new THREE.Mesh(new THREE.ConeGeometry(0.7, 2, 16), leavesMaterial);
+    leaves.position.y = 2; // Position leaves at the top of the trunk
+    
+    // Add trunk and leaves to the tree object
+    tree.add(trunk);
+    tree.add(leaves);
+
+    tree.position.z = -100;
+    tree.position.y = 0.5; // Place on the ground
+    tree.position.x = Math.random() > 0.5 ? 1.5 : -1.5; // Randomly place on left or right
+    scene.add(tree);
+    obstacles.push(tree);
 }
 
 function spawnCoin() {
