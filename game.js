@@ -99,6 +99,16 @@ function init() {
     animate();
 }
 
+document.addEventListener('click', function playMusic() {
+    const audio = document.getElementById('background-music');
+    audio.play().then(() => {
+        // Remove the event listener after the music starts playing
+        document.removeEventListener('click', playMusic);
+    }).catch(error => {
+        console.log("Failed to play audio:", error);
+    });
+});
+
 // Pause, Resume, and Quit listeners
 document.addEventListener('keydown', (event) => {
     if (event.key === 'P' || event.key === 'p') {
