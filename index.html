@@ -1,4 +1,4 @@
-npm <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,11 @@ npm <!DOCTYPE html>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Background Music -->
+    <audio id="background-music" loop>
+        <source src="01 - Tokyo Drift (Fast & Furious) - The Fast & the Furious Tokyo Drift Soundtrack.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="container"></div>
 
     <div id="ui-overlay">
@@ -29,15 +34,15 @@ npm <!DOCTYPE html>
             <div class="level-grid">
                 <div class="level" id="level1">
                     <div class="level-thumbnail"></div>
-                    <span><a href="game.html?level=1">Forest Run</a></span> <!-- Link to the game -->
+                    <span><a href="game.html?level=1">Forest Run</a></span>
                 </div>
                 <div class="level" id="level2">
                     <div class="level-thumbnail"></div>
-                    <span><a href="caveescape.html?level=2">Cave Escape</a></span> <!-- Link to the game -->
+                    <span><a href="caveescape.html?level=2">Cave Escape</a></span>
                 </div>
                 <div class="level" id="level3">
                     <div class="level-thumbnail"></div>
-                    <span><a href="game.html?level=3">Temple Challenge</a></span> <!-- Link to the game -->
+                    <span><a href="game.html?level=3">Temple Challenge</a></span>
                 </div>
             </div>
         </div>
@@ -45,5 +50,19 @@ npm <!DOCTYPE html>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="app.js"></script>
+
+    <!-- Script to handle music autoplay on any page click -->
+    <script>
+        // Play music on the first click anywhere on the page
+        document.addEventListener('click', function playMusic() {
+            const audio = document.getElementById('background-music');
+            audio.play().then(() => {
+                // Remove the event listener after the music starts playing
+                document.removeEventListener('click', playMusic);
+            }).catch(error => {
+                console.log("Failed to play audio:", error);
+            });
+        });
+    </script>
 </body>
 </html>
